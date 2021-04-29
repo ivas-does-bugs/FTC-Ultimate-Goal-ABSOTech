@@ -103,6 +103,9 @@ public class DriveByGyro extends LinearOpMode {
         robot.rightDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        //telemetry.speak("Hello  this is mister robot and im alive and i can talk im going to destroy humanity Bye");
+        //telemetry.update();
+
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             telemetry.addData(">", "Robot Heading  %5.2f", lastAngles.firstAngle);
@@ -119,13 +122,12 @@ public class DriveByGyro extends LinearOpMode {
 
 
 
-
         switch(camera.checkNumberOfRings()){
             case 0:
                 //****************************       TARGET A   ******************************
 
         gyroDrive(DRIVE_SPEED, 55.1, 0.0);    // Drive FWD 55 inches
-        gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
+        gyroHold(TURN_SPEED, 0.0, 3);    // Hold 0 Deg heading for a 3 second
         gyroDrive(DRIVE_SPEED, 3, 0.0);
         brat(-270);
         sleep(500);
@@ -133,25 +135,25 @@ public class DriveByGyro extends LinearOpMode {
         sleep(500);
         brat(200);
         gyroTurn( TURN_SPEED,  157.0);         // Turn  CW  to  145 Degrees
-        gyroHold( TURN_SPEED,  157.0,0.5);         //  Hold 1450 Deg heading for a 1/2 second
+        gyroHold( TURN_SPEED,  157.0,3);         //  Hold 1450 Deg heading for a 1/2 second
         brat(-220);
-        gyroDrive(0.7, 37.5, 157.0);  // Drive FWD 12 inches at 45 degrees
-        gyroHold( TURN_SPEED, 157.0, 1.5);    // Hold 145 Deg heading for a 1second
+        gyroDrive(0.7, 37.7, 157.0);  // Drive FWD 12 inches at 45 degrees
+        gyroHold( TURN_SPEED, 157.0, 3);    // Hold 145 Deg heading for a 1second
         cleste(MAX_POS);
         sleep(500);
-        brat(15);
+        brat(25);
         sleep(1000);
-/*
+
         gyroTurn( TURN_SPEED,   -15.0);         // Turn  CW  to   0 Degrees
         gyroHold( TURN_SPEED,  -15.0,0.5);         //  Hold 20 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 39.0, -15.0);  // Drive FWD 39 inches at -30 degrees
+        gyroDrive(DRIVE_SPEED, 25.0, -15.0);  // Drive FWD 39 inches at -30 degrees
         cleste(MIN_POS);
-        sleep(1000);
+        sleep(500);
         brat(112);
 
         gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
         gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 30.0, 45.0);*/  // Drive FWD 12 inches at 45 degrees
+        gyroDrive(DRIVE_SPEED, 20.0, 45.0);  // Drive FWD 12 inches at 45 degrees
 
 //********************END TARGET A*************
 
