@@ -73,14 +73,9 @@ public class DriveByGyro extends LinearOpMode {
 
         //********************** INITIALIZARE BRAT *************************
 
-        brat(-135);
-        cleste(MIN_POS);
-        sleep(2000);
-        brat(-135);
-        sleep(1000);
+
         cleste(MAX_POS);
-        sleep(1000);
-        brat(15);
+
 
 //initializare IMU
 
@@ -122,19 +117,45 @@ public class DriveByGyro extends LinearOpMode {
         // Put a hold after each turn
 
 
-        gyroDrive(DRIVE_SPEED, 60, 0.0);    // Drive FWD 48 inches
-        encoderDrive(TURN_SPEED, 20, -20, -20, 20);
-        gyroHold( TURN_SPEED, 0, 2);    // Hold -45 Deg heading for a 1/2 second
-        encoderDrive(TURN_SPEED, -20,20,20,-20);
-        gyroHold( TURN_SPEED, 0, 2);    // Hold -45 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, -60, 0.0);
-/*
+
+
+
         switch(camera.checkNumberOfRings()){
             case 0:
-                gyroDrive(DRIVE_SPEED, 53, 0);
-                encoderDrive(TURN_SPEED, );
-                telemetry.addLine("Cazul 0A");
-                telemetry.update();
+                //****************************       TARGET A   ******************************
+
+        gyroDrive(DRIVE_SPEED, 55.1, 0.0);    // Drive FWD 55 inches
+        gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
+        gyroDrive(DRIVE_SPEED, 3, 0.0);
+        brat(-270);
+        sleep(500);
+        cleste(MIN_POS);
+        sleep(500);
+        brat(200);
+        gyroTurn( TURN_SPEED,  157.0);         // Turn  CW  to  145 Degrees
+        gyroHold( TURN_SPEED,  157.0,0.5);         //  Hold 1450 Deg heading for a 1/2 second
+        brat(-220);
+        gyroDrive(0.7, 37.5, 157.0);  // Drive FWD 12 inches at 45 degrees
+        gyroHold( TURN_SPEED, 157.0, 1.5);    // Hold 145 Deg heading for a 1second
+        cleste(MAX_POS);
+        sleep(500);
+        brat(15);
+        sleep(1000);
+/*
+        gyroTurn( TURN_SPEED,   -15.0);         // Turn  CW  to   0 Degrees
+        gyroHold( TURN_SPEED,  -15.0,0.5);         //  Hold 20 Deg heading for a 1/2 second
+        gyroDrive(DRIVE_SPEED, 39.0, -15.0);  // Drive FWD 39 inches at -30 degrees
+        cleste(MIN_POS);
+        sleep(1000);
+        brat(112);
+
+        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
+        gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+        gyroDrive(DRIVE_SPEED, 30.0, 45.0);*/  // Drive FWD 12 inches at 45 degrees
+
+//********************END TARGET A*************
+
+
                 break;
             case 1:
                 gyroDrive(DRIVE_SPEED, 40, 0);
@@ -149,7 +170,7 @@ public class DriveByGyro extends LinearOpMode {
 
 
         }
-/*
+
         sleep(2000);
 
 
@@ -165,40 +186,7 @@ public class DriveByGyro extends LinearOpMode {
         gyroDrive(DRIVE_SPEED,-48.0, 0.0);    // Drive REV 48 inches
 */
 
-//****************************       TARGET A   ******************************
-/*
-        gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 55 inches
-        gyroHold( TURN_SPEED, 0.0, 3);    // Hold 0 Deg heading for a 3 second
 
-        cleste(MIN_POS);
-        sleep(1000);
-        brat(112);
-
-
-        gyroTurn( TURN_SPEED,  163.0);         // Turn  CW  to  145 Degrees
-        gyroHold( TURN_SPEED,  163.0,0.5);         //  Hold 1450 Deg heading for a 1/2 second
-        brat(-112);
-       gyroDrive(DRIVE_SPEED, 25.0, 163.0);  // Drive FWD 12 inches at 45 degrees
-       gyroHold( TURN_SPEED, 163.0, 1.5);    // Hold 145 Deg heading for a 1second
-        cleste(MAX_POS);
-        brat(15);
-
-
-
-       gyroTurn( TURN_SPEED,   -25.0);         // Turn  CW  to   0 Degrees
-       gyroHold( TURN_SPEED,  -25.0,0.5);         //  Hold 20 Deg heading for a 1/2 second
-       gyroDrive(DRIVE_SPEED, 39.0, -25.0);  // Drive FWD 39 inches at -30 degrees
-        cleste(MIN_POS);
-        sleep(1000);
-        brat(112);
-
-        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
-        gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 30.0, 45.0);  // Drive FWD 12 inches at 45 degrees
-
-//********************END TARGET A*************
-
- */
 
 
 
