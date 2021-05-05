@@ -131,7 +131,7 @@ public class ModulTeleOP extends LinearOpMode {
 
             //Turn on/off the shooting mechanism
             if (gamepad2.x) {
-                double VITEZA_ARUNCARE = 1500;
+                double VITEZA_ARUNCARE = 1200;
               //  shooter.setPower(1);
                 shooter.setVelocity(VITEZA_ARUNCARE);
             }
@@ -173,7 +173,7 @@ public class ModulTeleOP extends LinearOpMode {
                 pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                tinta = (int) (360 * COUNTS_PER_GRADE);
+                tinta = (int) (4*360 * COUNTS_PER_GRADE);
 
 
                 pusher.setTargetPosition(tinta);
@@ -182,12 +182,13 @@ public class ModulTeleOP extends LinearOpMode {
 
                 runtime.reset();
 
-
+        /*
                 while (opModeIsActive() && pusher.isBusy()) {
                     telemetry.addData("Valoare Encoder", "Stare  %7d: ", pusher.getCurrentPosition());
                     telemetry.update();
                 }
-               pusher.setPower(0);
+          */
+               //pusher.setPower(0);
 
 
 

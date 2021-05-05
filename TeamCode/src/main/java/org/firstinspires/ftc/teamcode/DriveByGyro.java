@@ -13,21 +13,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name="Auto Drive By Gyro", group="")
+@Autonomous(name = "Auto Drive By Gyro", group = "")
 //@Disabled
 public class DriveByGyro extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
+    HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
     private ElapsedTime runtime = new ElapsedTime();
-     BNO055IMU gyro    = null;                    // Additional Gyro device
-     Orientation lastAngles = new Orientation();
-     double             globalAngle;
+    BNO055IMU gyro = null;                    // Additional Gyro device
+    Orientation lastAngles = new Orientation();
+    double globalAngle;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 383.6 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 3.93 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+    static final double COUNTS_PER_MOTOR_REV = 383.6;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 3.93;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
     static final double COUNTS_PER_MOTOR = 1440;
@@ -39,14 +39,14 @@ public class DriveByGyro extends LinearOpMode {
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
-    static final double     DRIVE_SPEED             = 1;     // 0.7Nominal speed for better accuracy.
-    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
+    static final double DRIVE_SPEED = 1;     // 0.7Nominal speed for better accuracy.
+    static final double TURN_SPEED = 0.5;     // Nominal half speed for better accuracy.
 
-    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.1;     // 0.15Larger is more responsive, but also less stable
+    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
+    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
+    static final double P_DRIVE_COEFF = 0.1;     // 0.15Larger is more responsive, but also less stable
 
-    static  final  double V_ARUNCARE = 1250;
+    static final double V_ARUNCARE = 925;
 
 
     @Override
@@ -65,14 +65,14 @@ public class DriveByGyro extends LinearOpMode {
         robot.leftDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
- //       robot.shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //       robot.shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         WebCamera camera = new WebCamera();
         camera.init(hardwareMap, telemetry);
 
-        BNO055IMU.Parameters parameters=new BNO055IMU.Parameters();
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.mode = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit= BNO055IMU.AngleUnit.DEGREES;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled = false;
 
@@ -84,7 +84,7 @@ public class DriveByGyro extends LinearOpMode {
 
 //initializare IMU
 
-        gyro = hardwareMap.get(BNO055IMU.class,"imu");
+        gyro = hardwareMap.get(BNO055IMU.class, "imu");
 
         gyro.initialize(parameters);
         // Send telemetry message to alert driver that we are calibrating;
@@ -92,15 +92,14 @@ public class DriveByGyro extends LinearOpMode {
         telemetry.update();
 
 
-
         // make sure the gyro is calibrated before continuing
-        while (!isStopRequested() && !gyro.isGyroCalibrated())  {
+        while (!isStopRequested() && !gyro.isGyroCalibrated()) {
             sleep(50);
             idle();
         }
 
         telemetry.addData(">", "Waiting for Start");
-        telemetry.addData("IMU status",gyro.getCalibrationStatus().toString());
+        telemetry.addData("IMU status", gyro.getCalibrationStatus().toString());
         telemetry.update();
 
         robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -108,8 +107,6 @@ public class DriveByGyro extends LinearOpMode {
         robot.rightDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        telemetry.speak("Hello  this is mister robot and im alive and i can talk im going to destroy humanity Bye");
-        telemetry.update();
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
@@ -125,55 +122,67 @@ public class DriveByGyro extends LinearOpMode {
         // Put a hold after each turn
 
 
-
-
-        switch(camera.checkNumberOfRings()){
+        switch (camera.checkNumberOfRings()) {
             case 0:
-                //****************************       TARGET A   ******************************
+                //****************************       TARGET A   *****************************
+                //Pornim motorul de aruncare si mergem spre pozita de tragere
                 aruncare(V_ARUNCARE);
-        gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+                gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+                gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
 
-        gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
+                //tragere
+                impingere(4);
+                aruncare(0);
 
-                 incarcare(3);
-        gyroDrive(DRIVE_SPEED, 5, 0.0);
-        brat(-270);
-        sleep(500);
-        cleste(MIN_POS);
-        sleep(500);
-        brat(180);
-        gyroTurn( TURN_SPEED,  157.0);         // Turn  CW  to  145 Degrees
-        gyroHold( TURN_SPEED,  157.0,1.5);         //  Hold 1450 Deg heading for a 1/2 second
-        brat(-170);
-       gyroDrive(0.7, 37, 157.0);  // Drive FWD 12 inches at 45 degrees
-        gyroHold( TURN_SPEED, 157.0, 1.5);    // Hold 145 Deg heading for a 1second
-        cleste(MAX_POS);
-        sleep(500);
-        brat(25);
-        sleep(1000);
+                //se duce lasa wobble golul
+                gyroDrive(DRIVE_SPEED, 5, 0.0);
+                brat(-280);
+                sleep(500);
+                cleste(MIN_POS);
+                sleep(500);
+                brat(180);
 
-        gyroTurn( TURN_SPEED,   -15.0);         // Turn  CW  to   0 Degrees
-        gyroHold( TURN_SPEED,  -15.0,0.5);         //  Hold 20 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 30.0, -15.0);  // Drive FWD 39 inches at -30 degrees
-        cleste(MIN_POS);
-        sleep(500);
-        brat(112);
 
-        gyroTurn( TURN_SPEED,  45.0);         // Turn  CW  to  45 Degrees
-        gyroHold( TURN_SPEED,  45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 20.0, 45.0);  // Drive FWD 12 inches at 45 degrees
+
+                gyroTurn(TURN_SPEED, 157.0);         // Turn  CW  to  145 Degrees
+                gyroHold(TURN_SPEED, 157.0, 1.5);         //  Hold 1450 Deg heading for a 1/2 second
+                brat(-169);
+                gyroDrive(0.7, 37, 157.0);  // Drive FWD 12 inches at 45 degrees
+                gyroHold(TURN_SPEED, 157.0, 1.5);    // Hold 145 Deg heading for a 1second
+                cleste(MAX_POS);
+                sleep(500);
+                brat(25);
+                sleep(1000);
+
+                gyroTurn(TURN_SPEED, -15.0);         // Turn  CW  to   0 Degrees
+                gyroHold(TURN_SPEED, -15.0, 0.5);         //  Hold 20 Deg heading for a 1/2 second
+                gyroDrive(DRIVE_SPEED, 30.0, -15.0);  // Drive FWD 39 inches at -30 degrees
+                cleste(MIN_POS);
+                sleep(500);
+                brat(112);
+
+                gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
+                gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+                gyroDrive(DRIVE_SPEED, 20.0, 45.0);  // Drive FWD 12 inches at 45 degrees
 
 //********************END TARGET A*************
 
 
                 break;
             case 1:
-                gyroDrive(DRIVE_SPEED, 40, 0);
-                telemetry.addLine("cazul 1B");
-                telemetry.update();
+                //****************************       TARGET A   *****************************
+                //Pornim motorul de aruncare si mergem spre pozita de tragere
+                aruncare(V_ARUNCARE);
+                gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+                gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
+
+                //tragere
+                impingere(4);
+                aruncare(0);
+
                 break;
             case 4:
-                gyroDrive(DRIVE_SPEED,80, 0);
+                gyroDrive(DRIVE_SPEED, 80, 0);
                 telemetry.addLine("Cazul 4C");
                 telemetry.update();
                 break;
@@ -197,51 +206,47 @@ public class DriveByGyro extends LinearOpMode {
 */
 
 
-
-
-
         telemetry.addData("Path", "Complete");
         telemetry.update();
     }
 
 
     /**
-     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-     *  Move will stop if either of these conditions occur:
-     *  1) Move gets to the desired position
-     *  2) Driver stops the opmode running.
+     * Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     * Move will stop if either of these conditions occur:
+     * 1) Move gets to the desired position
+     * 2) Driver stops the opmode running.
      *
-     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
+     * @param speed    Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distance Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle    Absolute Angle (in Degrees) relative to last gyro reset.
+     *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                 If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroDrive ( double speed,
-                            double distance,
-                            double angle) {
+    public void gyroDrive(double speed,
+                          double distance,
+                          double angle) {
 
-        int     newLeftTarget;
-        int     newRightTarget;
-        int     newLeftTargetFront;
-        int     newRightTargetFront;
-        int     moveCounts;
-        double  max;
-        double  error;
-        double  steer;
-        double  leftSpeed;
-        double  rightSpeed;
+        int newLeftTarget;
+        int newRightTarget;
+        int newLeftTargetFront;
+        int newRightTargetFront;
+        int moveCounts;
+        double max;
+        double error;
+        double steer;
+        double leftSpeed;
+        double rightSpeed;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            moveCounts = (int)(distance * COUNTS_PER_INCH);
+            moveCounts = (int) (distance * COUNTS_PER_INCH);
             newLeftTarget = robot.leftDrive.getCurrentPosition() + moveCounts;
             newRightTarget = robot.rightDrive.getCurrentPosition() + moveCounts;
-            newLeftTargetFront = robot.leftDriveFront.getCurrentPosition()+moveCounts;
+            newLeftTargetFront = robot.leftDriveFront.getCurrentPosition() + moveCounts;
             newRightTargetFront = robot.rightDriveFront.getCurrentPosition() + moveCounts;
-
 
 
             // Set Target and Turn On RUN_TO_POSITION
@@ -279,8 +284,7 @@ public class DriveByGyro extends LinearOpMode {
 
                 // Normalize speeds if either one exceeds +/- 1.0;
                 max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
-                if (max > 1.0)
-                {
+                if (max > 1.0) {
                     leftSpeed /= max;
                     rightSpeed /= max;
                 }
@@ -291,11 +295,11 @@ public class DriveByGyro extends LinearOpMode {
                 robot.rightDriveFront.setPower(rightSpeed);
 
                 // Display drive status for the driver.
-                telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
-                telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
-                telemetry.addData("Actual",  "%7d:%7d",      robot.leftDrive.getCurrentPosition(),
+                telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
+                telemetry.addData("Target", "%7d:%7d", newLeftTarget, newRightTarget);
+                telemetry.addData("Actual", "%7d:%7d", robot.leftDrive.getCurrentPosition(),
                         robot.rightDrive.getCurrentPosition());
-                telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+                telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
                 telemetry.update();
             }
 
@@ -304,7 +308,6 @@ public class DriveByGyro extends LinearOpMode {
             robot.rightDrive.setPower(0);
             robot.leftDriveFront.setPower(0);
             robot.rightDriveFront.setPower(0);
-
 
 
             // Turn off RUN_TO_POSITION
@@ -316,17 +319,17 @@ public class DriveByGyro extends LinearOpMode {
     }
 
     /**
-     *  Method to spin on central axis to point in a new direction.
-     *  Move will stop if either of these conditions occur:
-     *  1) Move gets to the heading (angle)
-     *  2) Driver stops the opmode running.
+     * Method to spin on central axis to point in a new direction.
+     * Move will stop if either of these conditions occur:
+     * 1) Move gets to the heading (angle)
+     * 2) Driver stops the opmode running.
      *
      * @param speed Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
+     * @param angle Absolute Angle (in Degrees) relative to last gyro reset.
+     *              0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *              If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroTurn (  double speed, double angle) {
+    public void gyroTurn(double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
@@ -336,16 +339,16 @@ public class DriveByGyro extends LinearOpMode {
     }
 
     /**
-     *  Method to obtain & hold a heading for a finite amount of time
-     *  Move will stop once the requested time has elapsed
+     * Method to obtain & hold a heading for a finite amount of time
+     * Move will stop once the requested time has elapsed
      *
-     * @param speed      Desired speed of turn.
-     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                   If a relative angle is required, add/subtract from current heading.
-     * @param holdTime   Length of time (in seconds) to hold the specified heading.
+     * @param speed    Desired speed of turn.
+     * @param angle    Absolute Angle (in Degrees) relative to last gyro reset.
+     *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                 If a relative angle is required, add/subtract from current heading.
+     * @param holdTime Length of time (in seconds) to hold the specified heading.
      */
-    public void gyroHold( double speed, double angle, double holdTime) {
+    public void gyroHold(double speed, double angle, double holdTime) {
 
         ElapsedTime holdTimer = new ElapsedTime();
 
@@ -367,17 +370,17 @@ public class DriveByGyro extends LinearOpMode {
     /**
      * Perform one cycle of closed loop heading control.
      *
-     * @param speed     Desired speed of turn.
-     * @param angle     Absolute Angle (in Degrees) relative to last gyro reset.
-     *                  0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-     *                  If a relative angle is required, add/subtract from current heading.
-     * @param PCoeff    Proportional Gain coefficient
+     * @param speed  Desired speed of turn.
+     * @param angle  Absolute Angle (in Degrees) relative to last gyro reset.
+     *               0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *               If a relative angle is required, add/subtract from current heading.
+     * @param PCoeff Proportional Gain coefficient
      * @return
      */
     boolean onHeading(double speed, double angle, double PCoeff) {
-        double   error ;
-        double   steer ;
-        boolean  onTarget = false ;
+        double error;
+        double steer;
+        boolean onTarget = false;
         double leftSpeed;
         double rightSpeed;
 
@@ -386,14 +389,13 @@ public class DriveByGyro extends LinearOpMode {
 
         if (Math.abs(error) <= HEADING_THRESHOLD) {
             steer = 0.0;
-            leftSpeed  = 0.0;
+            leftSpeed = 0.0;
             rightSpeed = 0.0;
             onTarget = true;
-        }
-        else {
+        } else {
             steer = getSteer(error, PCoeff);
-            rightSpeed  = speed * steer;
-            leftSpeed   = -rightSpeed;
+            rightSpeed = speed * steer;
+            leftSpeed = -rightSpeed;
         }
 
         // Send desired speeds to motors.
@@ -412,66 +414,67 @@ public class DriveByGyro extends LinearOpMode {
 
     /**
      * getError determines the error between the target angle and the robot's current heading
-     * @paramtargetAngle  Desired angle (relative to global reference established at last Gyro Reset).
-     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     *
+     * @return error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
+     * +ve error means the robot should turn LEFT (CCW) to reduce error.
+     * @paramtargetAngle Desired angle (relative to global reference established at last Gyro Reset).
      */
 
-    private double getAngle()
-    {
+    private double getAngle() {
         Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        double deltaAngle =angles.firstAngle - lastAngles.firstAngle;
-        if(deltaAngle <-180)
-            deltaAngle +=360;
-        else if (deltaAngle >180)
-            deltaAngle -=360;
-        globalAngle +=deltaAngle;
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+        globalAngle += deltaAngle;
         lastAngles = angles;
-        return  globalAngle;
+        return globalAngle;
     }
+
     public double getError(double targetAngle) {
 
         double robotError;
 
         // calculate error in -179 to +180 range  (
         robotError = targetAngle - getAngle();
-        while (robotError > 180)  robotError -= 360;
+        while (robotError > 180) robotError -= 360;
         while (robotError <= -180) robotError += 360;
         return robotError;
     }
 
     /**
      * returns desired steering force.  +/- 1 range.  +ve = steer left
-     * @param error   Error angle in robot relative degrees
-     * @param PCoeff  Proportional Gain Coefficient
+     *
+     * @param error  Error angle in robot relative degrees
+     * @param PCoeff Proportional Gain Coefficient
      * @return
      */
     public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -1, 1);
     }
-    private double checkDirection()
-    {
-        double correction, angle,gain=.10;
-        angle=getAngle();
-        if(angle==0)
-            correction=0;
+
+    private double checkDirection() {
+        double correction, angle, gain = .10;
+        angle = getAngle();
+        if (angle == 0)
+            correction = 0;
         else
-            correction=-angle;
-        return  correction;
+            correction = -angle;
+        return correction;
 
     }
-    public void driveOn(double power, double distanta, double timp)
-    {
-       double corectie;
+
+    public void driveOn(double power, double distanta, double timp) {
+        double corectie;
         ElapsedTime holdTimp = new ElapsedTime();
         holdTimp.reset();
-        while(opModeIsActive()&& (holdTimp.time()< timp)) {
+        while (opModeIsActive() && (holdTimp.time() < timp)) {
             corectie = checkDirection();
-            robot.leftDrive.setPower(power-corectie);
-            robot.rightDrive.setPower(power+corectie);
-            robot.leftDriveFront.setPower(power-corectie);
-            robot.rightDriveFront.setPower(power+corectie);
-
+            robot.leftDrive.setPower(power - corectie);
+            robot.rightDrive.setPower(power + corectie);
+            robot.leftDriveFront.setPower(power - corectie);
+            robot.rightDriveFront.setPower(power + corectie);
 
 
         }
@@ -481,6 +484,7 @@ public class DriveByGyro extends LinearOpMode {
         robot.leftDriveFront.setPower(0);
         robot.rightDriveFront.setPower(0);
     }
+
     //****************************************** BRAT **********************************
     public void brat(int grade) {
         robot.brat.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -489,6 +493,7 @@ public class DriveByGyro extends LinearOpMode {
         robot.brat.setPower(1.0);
         robot.brat.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+
     //**********************************************************
     //*****************************CLESTE***********************************************
     public void cleste(double position) {
@@ -498,30 +503,28 @@ public class DriveByGyro extends LinearOpMode {
     //**********************************************************
 
     //********************************* aruncare ******************
-    public  void aruncare(double v_aruncare)
-    {
+    public void aruncare(double v_aruncare) {
         robot.shooter.setVelocity(v_aruncare);
     }
 
 
     //************************************
-    public void incarcare( int rotatii)
-    {
+    public void impingere(int rotatii) {
         robot.pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.pusher.setPower(1.0);
         int tinta;
-        tinta = (int) (rotatii*360 * COUNTS_PER_GRADE);
+        tinta = (int) (rotatii * 360 * COUNTS_PER_GRADE);
         robot.pusher.setTargetPosition(tinta);
         robot.pusher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-         runtime.reset();
+        runtime.reset();
 
-            while (opModeIsActive() && robot.pusher.isBusy() && runtime.seconds() < 5) {
-                telemetry.addData("Valoare : Encoder", "Stare  %7d: ", robot.pusher.getCurrentPosition());
-                telemetry.update();
-            }
-            robot.pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.shooter.setVelocity(0);
+        while (opModeIsActive() && robot.pusher.isBusy() && runtime.seconds() < 5) {
+            telemetry.addData("Valoare : Encoder", "Stare  %7d: ", robot.pusher.getCurrentPosition());
+            telemetry.update();
+        }
+        robot.pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.shooter.setVelocity(0);
 
 
     }
