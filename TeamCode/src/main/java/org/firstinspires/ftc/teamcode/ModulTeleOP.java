@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "TeleOp_Principal", group = "")
 
-public class ModulTeleOP extends LinearOpMode {
+public class ModulTeleOP extends OpMode {
 
     private DcMotor motorRightFront;
     private DcMotor motorLeftFront;
@@ -48,7 +48,7 @@ public class ModulTeleOP extends LinearOpMode {
 
 
     @Override
-    public void runOpMode() {
+    public void init() {
 
         //Motor initialization
         motorLeftBack = hardwareMap.dcMotor.get("LeftBack");   // motor stanga spate
@@ -78,72 +78,75 @@ public class ModulTeleOP extends LinearOpMode {
 
 
         // brat.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    @Override
+    public void start() {
+    }
 
 
-        //Wait for start
-        waitForStart();
+    @Override
+    public void loop() {
 
 
-        while (opModeIsActive()) {
+        //Get input
 
-            //Get input
+        vertical = -gamepad1.right_stick_y;
+        strafe = gamepad1.left_stick_x;
+        pusherPower = -gamepad2.right_stick_y;
 
-            vertical = -gamepad1.right_stick_y;
-            strafe = gamepad1.left_stick_x;
-            pusherPower = -gamepad2.right_stick_y;
+        rotateSmalLeft = (double) gamepad1.left_trigger;
+        rotateSmalRight = (double) gamepad1.right_trigger;
 
-            rotateSmalLeft = (double) gamepad1.left_trigger;
-            rotateSmalRight = (double) gamepad1.right_trigger;
+        if (rotateSmalLeft > 0)
+            rotate = rotateSmalLeft * -0.3;
+        else if (rotateSmalRight > 0)
+            rotate = rotateSmalRight * 0.3;
+        else
+            rotate = gamepad1.right_stick_x;// pe joystickul din dreapta x-ul e inversat 4 no rreal reason at all
+        //
+        //
 
-            if(rotateSmalLeft > 0)
-                rotate = rotateSmalLeft * -0.3;
-            else if (rotateSmalRight > 0)
-                rotate = rotateSmalRight * 0.3;
-            else
-                rotate = gamepad1.right_stick_x;// pe joystickul din dreapta x-ul e inversat 4 no rreal reason at all
-            //
-            //
+        bratUP = (double) (gamepad2.left_trigger);
+        bratDOWN = (double) (gamepad2.right_trigger);
 
-            bratUP = (double) (gamepad2.left_trigger);
-            bratDOWN = (double) (gamepad2.right_trigger);
+        brat.setPower(bratUP - bratDOWN);
 
-            brat.setPower(bratUP - bratDOWN);
+        //  pusher.setPower(pusherPower);
 
-            //  pusher.setPower(pusherPower);
+        telemetry.addLine(Double.toString(strafe));
+        telemetry.update();
 
-            telemetry.addLine(Double.toString(strafe));
-            telemetry.update();
-
-            //Set basic Motor to input
-            motorRightFront.setPower(vertical - rotate - strafe);
-            motorRightBack.setPower(vertical - rotate + strafe);
-            motorLeftFront.setPower(vertical + rotate + strafe);
-            motorLeftBack.setPower(vertical + rotate - strafe);
+        //Set basic Motor to input
+        motorRightFront.setPower(vertical - rotate - strafe);
+        motorRightBack.setPower(vertical - rotate + strafe);
+        motorLeftFront.setPower(vertical + rotate + strafe);
+        motorLeftBack.setPower(vertical + rotate - strafe);
 
 
-            //Turn on/off the charging mechanism
-            if (gamepad2.a) {
-                charger.setPower(1);
-            }
-            if (gamepad2.b) {
-                charger.setPower(0.0);
-            }
+        //Turn on/off the charging mechanism
+        if (gamepad2.a) {
+            charger.setPower(1);
+        }
+        if (gamepad2.b) {
+            charger.setPower(0.0);
+        }
 
-            //Turn on/off the shooting mechanism
-            if (gamepad2.x) {
-                double VITEZA_ARUNCARE = 1200;
-              //  shooter.setPower(1);
-                shooter.setVelocity(VITEZA_ARUNCARE);
-            }
-            if (gamepad2.y) {
-               // shooter.setPower(0.0);
-                shooter.setVelocity(0);
-            }
+        //Turn on/off the shooting mechanism
+        if (gamepad2.x) {
+            double VITEZA_ARUNCARE = 1200;
+            //  shooter.setPower(1);
+            shooter.setVelocity(VITEZA_ARUNCARE);
+        }
+        if (gamepad2.y) {
+            // shooter.setPower(0.0);
+            shooter.setVelocity(0);
+        }
 
-            if (gamepad2.right_bumper) {
-                double VA = 750;
-                shooter.setVelocity(VA);
-            }
+        if (gamepad2.right_bumper) {
+            double VA = 750;
+            shooter.setVelocity(VA);
+        }
 
 
                 /*
@@ -157,45 +160,43 @@ public class ModulTeleOP extends LinearOpMode {
                 }
 */
 
-            if (gamepad2.dpad_right) {
-                clesteDreapta.setPosition(MAX_POS);
-                clesteStanga.setPosition(MAX_POS);
-            }
-            if (gamepad2.dpad_left) {
-                clesteDreapta.setPosition(MIN_POS);
-                clesteStanga.setPosition(MIN_POS);
-            }
+        if (gamepad2.dpad_right) {
+            clesteDreapta.setPosition(MAX_POS);
+            clesteStanga.setPosition(MAX_POS);
+        }
+        if (gamepad2.dpad_left) {
+            clesteDreapta.setPosition(MIN_POS);
+            clesteStanga.setPosition(MIN_POS);
+        }
 
-            // setare pusher cu encoder
-            if (gamepad2.left_bumper) {
-                int tinta;
+        // setare pusher cu encoder
+        if (gamepad2.left_bumper) {
+            int tinta;
 
-                pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                tinta = (int) (4*360 * COUNTS_PER_GRADE);
+            tinta = (int) (4 * 360 * COUNTS_PER_GRADE);
 
 
-                pusher.setTargetPosition(tinta);
-                pusher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                pusher.setPower(1);
+            pusher.setTargetPosition(tinta);
+            pusher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            pusher.setPower(1);
 
-                runtime.reset();
-
+            runtime.reset();
+        }
+    }
         /*
                 while (opModeIsActive() && pusher.isBusy()) {
                     telemetry.addData("Valoare Encoder", "Stare  %7d: ", pusher.getCurrentPosition());
                     telemetry.update();
                 }
           */
-               //pusher.setPower(0);
+    //pusher.setPower(0);
 
 
+    //Update console
 
-
-            }
-            //Update console
-            telemetry.update();
                 /*
                 if (gamepad2.dpad_up) {
                     pusher.setPower(1);
@@ -282,9 +283,8 @@ public class ModulTeleOP extends LinearOpMode {
                     sleep(1000);
                     pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 }*/
-        }
-    }
 }
+
 /*
     public void encoderDrive(double speed, double leftInches, double rightInches, double leftFront, double rightFront, double timeoutS) {
 

@@ -46,7 +46,8 @@ public class DriveByGyro extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.1;     // 0.15Larger is more responsive, but also less stable
 
-    static final double V_ARUNCARE = 925;
+    static final double V_ARUNCARE = 930;
+    static final double V_ARUNCARE_PS = 700;
 
 
     @Override
@@ -107,6 +108,7 @@ public class DriveByGyro extends LinearOpMode {
         robot.rightDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        aruncare(V_ARUNCARE);
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
@@ -126,7 +128,7 @@ public class DriveByGyro extends LinearOpMode {
             case 0:
                 //****************************       TARGET A   *****************************
                 //Pornim motorul de aruncare si mergem spre pozita de tragere
-                aruncare(V_ARUNCARE);
+                //aruncare(V_ARUNCARE);
                 gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
                 gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
 
@@ -143,7 +145,6 @@ public class DriveByGyro extends LinearOpMode {
                 brat(180);
 
 
-
                 gyroTurn(TURN_SPEED, 157.0);         // Turn  CW  to  145 Degrees
                 gyroHold(TURN_SPEED, 157.0, 1.5);         //  Hold 1450 Deg heading for a 1/2 second
                 brat(-169);
@@ -156,41 +157,98 @@ public class DriveByGyro extends LinearOpMode {
 
                 gyroTurn(TURN_SPEED, -15.0);         // Turn  CW  to   0 Degrees
                 gyroHold(TURN_SPEED, -15.0, 0.5);         //  Hold 20 Deg heading for a 1/2 second
-                gyroDrive(DRIVE_SPEED, 30.0, -15.0);  // Drive FWD 39 inches at -30 degrees
+                gyroDrive(DRIVE_SPEED, 32.0, -15.0);  // Drive FWD 39 inches at -30 degrees
                 cleste(MIN_POS);
                 sleep(500);
                 brat(112);
 
                 gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
                 gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-                gyroDrive(DRIVE_SPEED, 20.0, 45.0);  // Drive FWD 12 inches at 45 degrees
+                gyroDrive(DRIVE_SPEED, 10.0, 45.0);  // Drive FWD 12 inches at 45 degrees
 
 //********************END TARGET A*************
 
 
                 break;
             case 1:
-                //****************************       TARGET A   *****************************
+                //****************************       TARGET B   *****************************
                 //Pornim motorul de aruncare si mergem spre pozita de tragere
-                aruncare(V_ARUNCARE);
+                //aruncare(V_ARUNCARE);
+                gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+                gyroHold(TURN_SPEED, 0.0, 1);    // Hold 0 Deg heading for a 3 second
+
+                //tragere
+                impingere(4);
+
+                gyroTurn(TURN_SPEED, -45); //Turn CW to 40 Degrees
+                gyroHold(TURN_SPEED, -45, 1);
+                colectare(true);
+                gyroDrive(DRIVE_SPEED, -20, -45);
+                gyroHold(TURN_SPEED, -45, 0.5);
+                aruncare(0);
+                gyroTurn(TURN_SPEED, 0);
+                gyroHold(TURN_SPEED, 0, 0.5);
+
+                //astepta colecatrea sa fie okey
+                //sleep(2000);
+                //impingere(4);
+                //sleep(2000);
+                aruncare(850);
+                gyroDrive(DRIVE_SPEED, 44, 0);
+                gyroHold(TURN_SPEED, 0, 0.5);
+                brat(-280);
+                sleep(500);
+                cleste(MIN_POS);
+                sleep(500);
+                gyroDrive(DRIVE_SPEED, -47, 0);
+                cleste(MAX_POS);
+                gyroHold(TURN_SPEED, 0, 0.5);
+                impingere(2);
+                colectare(false);
+                aruncare(0);
+                brat(10);
+                cleste(MIN_POS);
+                gyroTurn(TURN_SPEED, 170);
+                gyroHold(TURN_SPEED, 170, 0.5);
+                gyroDrive(DRIVE_SPEED, 7, 170);
+                sleep(500);
+                cleste(MAX_POS);
+                sleep(1000);
+                brat(30);
+                gyroTurn(TURN_SPEED, 5);
+                gyroDrive(DRIVE_SPEED, 50, 5);
+                cleste(MIN_POS);
+                sleep(1000);
+                gyroDrive(DRIVE_SPEED, -10, 0);
+
+
+                break;
+            case 4:
+                //**************************** TARGET C   *****************************
+                //Pornim motorul de aruncare si mergem spre pozita de tragere
+                //aruncare(V_ARUNCARE);
                 gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
                 gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
 
                 //tragere
                 impingere(4);
-                aruncare(0);
 
-                break;
-            case 4:
-                gyroDrive(DRIVE_SPEED, 80, 0);
-                telemetry.addLine("Cazul 4C");
-                telemetry.update();
+                // se duce la inele
+                gyroTurn(TURN_SPEED, -45); //Turn CW to 40 Degrees
+                gyroHold(TURN_SPEED, -45, 1);
+                //colectare(true);
+                gyroDrive(DRIVE_SPEED, -20, -45);
+                gyroHold(TURN_SPEED, -45, 0.5);
+
+                gyroDrive(DRIVE_SPEED, 2.5, -45);
+                colectare(true);
+                gyroDrive(0.4, -10, -45);
+                gyroTurn(TURN_SPEED, -20);
+                impingere(4);
                 break;
 
 
         }
-
-        sleep(2000);
 
 /*
  //test gyro
@@ -511,7 +569,7 @@ public class DriveByGyro extends LinearOpMode {
     //************************************
     public void impingere(int rotatii) {
         robot.pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.pusher.setPower(1.0);
+        robot.pusher.setPower(0.9);
         int tinta;
         tinta = (int) (rotatii * 360 * COUNTS_PER_GRADE);
         robot.pusher.setTargetPosition(tinta);
@@ -524,9 +582,18 @@ public class DriveByGyro extends LinearOpMode {
             telemetry.update();
         }
         robot.pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.shooter.setVelocity(0);
+        //robot.shooter.setVelocity(0);
 
 
+    }
+
+    //***********************colectare************************
+    public void colectare(boolean isON) {
+        if (isON) {
+            robot.charger.setPower(-1);
+        } else {
+            robot.charger.setPower(0);
+        }
     }
 
     public void encoderDrive(double speed, double leftInches, double rightInches, double leftFront, double rightFront) {
