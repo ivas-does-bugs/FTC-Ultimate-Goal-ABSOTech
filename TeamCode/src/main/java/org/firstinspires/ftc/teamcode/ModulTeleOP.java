@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
@@ -76,7 +73,7 @@ public class ModulTeleOP extends LinearOpMode {
         shooter.setDirection(DcMotor.Direction.REVERSE);
         shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        charger.setDirection(DcMotor.Direction.FORWARD);
+        charger.setDirection(DcMotor.Direction.REVERSE);
         pusher.setDirection(DcMotorEx.Direction.REVERSE);
 
 
@@ -134,12 +131,12 @@ public class ModulTeleOP extends LinearOpMode {
 
             //Turn on/off the shooting mechanism
             if (gamepad2.x) {
-                double VITEZA_ARUNCARE = 850;
-                //shooter.setPower(0.55);
+                double VITEZA_ARUNCARE = 1500;
+              //  shooter.setPower(1);
                 shooter.setVelocity(VITEZA_ARUNCARE);
             }
             if (gamepad2.y) {
-                //shooter.setPower(0.0);
+               // shooter.setPower(0.0);
                 shooter.setVelocity(0);
             }
 
@@ -172,36 +169,28 @@ public class ModulTeleOP extends LinearOpMode {
             // setare pusher cu encoder
             if (gamepad2.left_bumper) {
                 int tinta;
-                double va_pusher = 2500;
+
                 pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-                tinta = (int) (90 * COUNTS_PER_GRADE);
+                tinta = (int) (360 * COUNTS_PER_GRADE);
 
 
                 pusher.setTargetPosition(tinta);
                 pusher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                pusher.setVelocity(va_pusher);
+                pusher.setPower(1);
+
                 runtime.reset();
+
 
                 while (opModeIsActive() && pusher.isBusy()) {
                     telemetry.addData("Valoare Encoder", "Stare  %7d: ", pusher.getCurrentPosition());
                     telemetry.update();
                 }
-
-                pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+               pusher.setPower(0);
 
 
-                pusher.setTargetPosition(-tinta);
-                pusher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                pusher.setVelocity(va_pusher);
-                runtime.reset();
 
-                while (opModeIsActive() && pusher.isBusy()) {
-                    telemetry.addData("Valoare Encoder", "Stare  %7d: ", pusher.getCurrentPosition());
-                    telemetry.update();
-                }
 
             }
             //Update console

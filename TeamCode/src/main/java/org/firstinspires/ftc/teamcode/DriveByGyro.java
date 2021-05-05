@@ -19,6 +19,7 @@ public class DriveByGyro extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
+    private ElapsedTime runtime = new ElapsedTime();
      BNO055IMU gyro    = null;                    // Additional Gyro device
      Orientation lastAngles = new Orientation();
      double             globalAngle;
@@ -45,6 +46,8 @@ public class DriveByGyro extends LinearOpMode {
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.1;     // 0.15Larger is more responsive, but also less stable
 
+    static  final  double V_ARUNCARE = 1250;
+
 
     @Override
     public void runOpMode() {
@@ -61,6 +64,8 @@ public class DriveByGyro extends LinearOpMode {
         robot.rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.leftDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightDriveFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+ //       robot.shooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         WebCamera camera = new WebCamera();
         camera.init(hardwareMap, telemetry);
@@ -83,7 +88,7 @@ public class DriveByGyro extends LinearOpMode {
 
         gyro.initialize(parameters);
         // Send telemetry message to alert driver that we are calibrating;
-        telemetry.addData(">", "Calibrating Gyro");    //
+        telemetry.addData(">", "Calibrating Gyro");
         telemetry.update();
 
 
@@ -103,8 +108,8 @@ public class DriveByGyro extends LinearOpMode {
         robot.rightDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftDriveFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //telemetry.speak("Hello  this is mister robot and im alive and i can talk im going to destroy humanity Bye");
-        //telemetry.update();
+        telemetry.speak("Hello  this is mister robot and im alive and i can talk im going to destroy humanity Bye");
+        telemetry.update();
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
@@ -125,20 +130,23 @@ public class DriveByGyro extends LinearOpMode {
         switch(camera.checkNumberOfRings()){
             case 0:
                 //****************************       TARGET A   ******************************
+                aruncare(V_ARUNCARE);
+        gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
 
-        gyroDrive(DRIVE_SPEED, 55.1, 0.0);    // Drive FWD 55 inches
-        gyroHold(TURN_SPEED, 0.0, 3);    // Hold 0 Deg heading for a 3 second
-        gyroDrive(DRIVE_SPEED, 3, 0.0);
+        gyroHold(TURN_SPEED, 0.0, 2);    // Hold 0 Deg heading for a 3 second
+
+                 incarcare(3);
+        gyroDrive(DRIVE_SPEED, 5, 0.0);
         brat(-270);
         sleep(500);
         cleste(MIN_POS);
         sleep(500);
-        brat(200);
+        brat(180);
         gyroTurn( TURN_SPEED,  157.0);         // Turn  CW  to  145 Degrees
-        gyroHold( TURN_SPEED,  157.0,3);         //  Hold 1450 Deg heading for a 1/2 second
-        brat(-220);
-        gyroDrive(0.7, 37.7, 157.0);  // Drive FWD 12 inches at 45 degrees
-        gyroHold( TURN_SPEED, 157.0, 3);    // Hold 145 Deg heading for a 1second
+        gyroHold( TURN_SPEED,  157.0,1.5);         //  Hold 1450 Deg heading for a 1/2 second
+        brat(-170);
+       gyroDrive(0.7, 37, 157.0);  // Drive FWD 12 inches at 45 degrees
+        gyroHold( TURN_SPEED, 157.0, 1.5);    // Hold 145 Deg heading for a 1second
         cleste(MAX_POS);
         sleep(500);
         brat(25);
@@ -146,7 +154,7 @@ public class DriveByGyro extends LinearOpMode {
 
         gyroTurn( TURN_SPEED,   -15.0);         // Turn  CW  to   0 Degrees
         gyroHold( TURN_SPEED,  -15.0,0.5);         //  Hold 20 Deg heading for a 1/2 second
-        gyroDrive(DRIVE_SPEED, 25.0, -15.0);  // Drive FWD 39 inches at -30 degrees
+        gyroDrive(DRIVE_SPEED, 30.0, -15.0);  // Drive FWD 39 inches at -30 degrees
         cleste(MIN_POS);
         sleep(500);
         brat(112);
@@ -175,8 +183,8 @@ public class DriveByGyro extends LinearOpMode {
 
         sleep(2000);
 
-
-/* test gyro
+/*
+ //test gyro
         gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 48 inches
         gyroTurn( TURN_SPEED, -45.0);         // Turn  CCW to -45 Degrees
         gyroHold( TURN_SPEED, -45.0, 0.5);    // Hold -45 Deg heading for a 1/2 second
@@ -488,6 +496,35 @@ public class DriveByGyro extends LinearOpMode {
         robot.clesteDreapta.setPosition(position);
     }
     //**********************************************************
+
+    //********************************* aruncare ******************
+    public  void aruncare(double v_aruncare)
+    {
+        robot.shooter.setVelocity(v_aruncare);
+    }
+
+
+    //************************************
+    public void incarcare( int rotatii)
+    {
+        robot.pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.pusher.setPower(1.0);
+        int tinta;
+        tinta = (int) (rotatii*360 * COUNTS_PER_GRADE);
+        robot.pusher.setTargetPosition(tinta);
+        robot.pusher.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+         runtime.reset();
+
+            while (opModeIsActive() && robot.pusher.isBusy() && runtime.seconds() < 5) {
+                telemetry.addData("Valoare : Encoder", "Stare  %7d: ", robot.pusher.getCurrentPosition());
+                telemetry.update();
+            }
+            robot.pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.shooter.setVelocity(0);
+
+
+    }
 
     public void encoderDrive(double speed, double leftInches, double rightInches, double leftFront, double rightFront) {
 

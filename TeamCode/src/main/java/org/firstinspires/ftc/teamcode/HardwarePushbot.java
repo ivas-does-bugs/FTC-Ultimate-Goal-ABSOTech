@@ -101,10 +101,10 @@ public class HardwarePushbot
         rightDriveFront = hwMap.get(DcMotor.class, "RightFront");
         leftDriveFront = hwMap.get(DcMotor.class, "LeftFront");
 
-     //   shooter = hwMap.get(DcMotorEx.class,"shooter");
+       shooter = hwMap.get(DcMotorEx.class,"shooter");
         
         charger = hwMap.get(DcMotor.class, "charger");
-   //     pusher = hwMap.get(DcMotor.class, "pusher");
+        pusher = hwMap.get(DcMotor.class, "pusher");
         clesteDreapta = hwMap.get(Servo.class, "clesteDreapta");    //port 5
         clesteStanga = hwMap.get(Servo.class, "clesteStanga");      //port 4
         brat = hwMap.get(DcMotor.class, "brat");
@@ -134,9 +134,9 @@ public class HardwarePushbot
         //Shooting and Charging and pushing
         //shooter.setDirection(DcMotor.Direction.REVERSE);
         charger.setDirection(DcMotor.Direction.FORWARD);
-     //   pusher.setDirection(DcMotor.Direction.REVERSE);
+       pusher.setDirection(DcMotor.Direction.REVERSE);
 
-    //    shooter.setDirection(DcMotorEx.Direction.REVERSE);
+        shooter.setDirection(DcMotorEx.Direction.REVERSE);
 
         
         // Set all motors to zero power
@@ -145,8 +145,8 @@ public class HardwarePushbot
         leftDriveFront.setPower(0);
         rightDriveFront.setPower(0);
         charger.setPower(0);
-    //    shooter.setPower(0);
-   //     pusher.setPower(0);
+        shooter.setPower(0);
+       pusher.setPower(0);
         brat.setPower(0);
         
         //leftArm.setPower(0);
@@ -159,7 +159,7 @@ public class HardwarePushbot
         leftDriveFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         charger.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-    //    pusher.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pusher.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         
         //leftArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
