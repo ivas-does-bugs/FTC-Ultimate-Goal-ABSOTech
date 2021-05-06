@@ -114,7 +114,7 @@ public class ModulTeleOP extends OpMode {
 
         //  pusher.setPower(pusherPower);
 
-        telemetry.addLine(Double.toString(strafe));
+        telemetry.addLine(Double.toString(gamepad1.right_stick_x));
         telemetry.update();
 
         //Set basic Motor to input
@@ -132,9 +132,13 @@ public class ModulTeleOP extends OpMode {
             charger.setPower(0.0);
         }
 
+        if(gamepad2.dpad_down) {
+            charger.setPower(-1);
+        }
+
         //Turn on/off the shooting mechanism
         if (gamepad2.x) {
-            double VITEZA_ARUNCARE = 1200;
+            double VITEZA_ARUNCARE = 925;
             //  shooter.setPower(1);
             shooter.setVelocity(VITEZA_ARUNCARE);
         }
@@ -144,7 +148,7 @@ public class ModulTeleOP extends OpMode {
         }
 
         if (gamepad2.right_bumper) {
-            double VA = 750;
+            double VA = 850;
             shooter.setVelocity(VA);
         }
 
@@ -173,8 +177,9 @@ public class ModulTeleOP extends OpMode {
         if (gamepad2.left_bumper) {
             int tinta;
 
-            pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+           pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+           pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             tinta = (int) (4 * 360 * COUNTS_PER_GRADE);
 
