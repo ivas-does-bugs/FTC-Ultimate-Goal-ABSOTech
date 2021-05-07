@@ -13,9 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-@Autonomous(name = "Auto Drive By Gyro", group = "")
-//@Disabled
-public class DriveByGyro extends LinearOpMode {
+@Autonomous(name = "Autonom", group = "")
+public class Autonom extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwarePushbot robot = new HardwarePushbot();   // Use a Pushbot's hardware
@@ -166,6 +165,7 @@ public class DriveByGyro extends LinearOpMode {
                 gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
                 gyroDrive(DRIVE_SPEED, 10.0, 45.0);  // Drive FWD 12 inches at 45 degrees
                 brat(-50);
+                brat(100);
 
 //********************END TARGET A*************
 
@@ -221,7 +221,7 @@ public class DriveByGyro extends LinearOpMode {
                 cleste(MIN_POS);
                 sleep(1000);
                 gyroDrive(DRIVE_SPEED, -10, 0);
-
+                brat(60);
 
                 break;
             case 4:
@@ -239,7 +239,7 @@ public class DriveByGyro extends LinearOpMode {
                 gyroHold(TURN_SPEED, 0.0, 0.5);    // Hold 0 Deg heading for a 3 second
 
                 //lasa wobbl goalul
-                brat(-283);
+                brat(-270);
                 sleep(600);
                 cleste(MIN_POS);
                 gyroHold(TURN_SPEED, 0.0, 0.5);
@@ -261,7 +261,7 @@ public class DriveByGyro extends LinearOpMode {
                 gyroTurn(TURN_SPEED, 0);
                 gyroHold(TURN_SPEED,0,0.5);
 
-                gyroDrive(DRIVE_SPEED,96,0);
+                gyroDrive(DRIVE_SPEED,86,0);
                 cleste(MIN_POS);
                 brat(50);
                 gyroHold(TURN_SPEED,0,0.5);
@@ -269,9 +269,9 @@ public class DriveByGyro extends LinearOpMode {
 
                 gyroTurn(TURN_SPEED,-15);
                 gyroHold(TURN_SPEED, -15, 0.5);
-                gyroDrive(1,-60, -15);
+                gyroDrive(1,-50, -15);
                 gyroDrive(DRIVE_SPEED, 25, 0);
-
+                brat(60);
 
 
 
@@ -299,9 +299,8 @@ public class DriveByGyro extends LinearOpMode {
      *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *                 If a relative angle is required, add/subtract from current heading.
      */
-    public void gyroDrive(double speed,
-                          double distance,
-                          double angle) {
+    public void gyroDrive(double speed, double distance, double angle) {
+        //se ocupa cu miscarea liniara a robotului cu ajutorul giroscopului la un anumit unghi pe o distanta data
 
         int newLeftTarget;
         int newRightTarget;
@@ -586,6 +585,7 @@ public class DriveByGyro extends LinearOpMode {
 
     //************************************
     public void impingere(int rotatii) {
+        robot.pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.pusher.setPower(0.9);
         int tinta;
@@ -599,7 +599,7 @@ public class DriveByGyro extends LinearOpMode {
             telemetry.addData("Valoare : Encoder", "Stare  %7d: ", robot.pusher.getCurrentPosition());
             telemetry.update();
         }
-        robot.pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         //robot.shooter.setVelocity(0);
 
 

@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.os.Trace;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.internal.android.dx.dex.code.SimpleInsn;
-
-import java.sql.Driver;
-
-@Autonomous(name = "AutonomPrincipal", group = "")
+@Autonomous(name = "AutonomDefect", group = "")
+@Disabled
 public class Encoder62 extends LinearOpMode {
 
     /* Declare OpMode members. */

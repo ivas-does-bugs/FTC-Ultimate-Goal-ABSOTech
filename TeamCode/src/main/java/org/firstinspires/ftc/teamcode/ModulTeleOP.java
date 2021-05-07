@@ -45,6 +45,7 @@ public class ModulTeleOP extends OpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double DRIVE_SPEED = 0.8;
     static final double TURN_SPEED = 0.5;
+    static final double VITEZA_ARUNCARE = 930;
 
 
     @Override
@@ -110,7 +111,7 @@ public class ModulTeleOP extends OpMode {
         bratUP = (double) (gamepad2.left_trigger);
         bratDOWN = (double) (gamepad2.right_trigger);
 
-        brat.setPower(bratUP - bratDOWN);
+        brat.setPower((bratUP - bratDOWN)*0.5);
 
         //  pusher.setPower(pusherPower);
 
@@ -138,12 +139,9 @@ public class ModulTeleOP extends OpMode {
 
         //Turn on/off the shooting mechanism
         if (gamepad2.x) {
-            double VITEZA_ARUNCARE = 925;
-            //  shooter.setPower(1);
             shooter.setVelocity(VITEZA_ARUNCARE);
         }
         if (gamepad2.y) {
-            // shooter.setPower(0.0);
             shooter.setVelocity(0);
         }
 
