@@ -45,17 +45,13 @@ public class Autonom extends LinearOpMode {
     static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
     static final double P_DRIVE_COEFF = 0.1;     // 0.15Larger is more responsive, but also less stable
 
-    static final double V_ARUNCARE = 930;
+    static final double V_ARUNCARE = 990;
     static final double V_ARUNCARE_PS = 700;
 
 
     @Override
     public void runOpMode() {
 
-        /*
-         * Initialize the standard drive system variables.
-         * The init() method of the hardware class does most of the work here
-         */
         robot.init(hardwareMap);
 
 
@@ -115,172 +111,17 @@ public class Autonom extends LinearOpMode {
             telemetry.update();
         }
 
-        //reset gyro
-
-
-        // Step through each leg of the path,
-        // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        // Put a hold after each turn
-
-
         switch (camera.checkNumberOfRings()) {
             case 0:
-                //****************************       TARGET A   *****************************
-                //Pornim motorul de aruncare si mergem spre pozita de tragere
-                //aruncare(V_ARUNCARE);
-                gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
-                gyroHold(TURN_SPEED, -0.5, 2);    // Hold 0 Deg heading for a 3 second
-
-                //tragere
-                impingere(4);
-                aruncare(0);
-
-                //se duce lasa wobble golul
-                gyroDrive(DRIVE_SPEED, 5, 0.0);
-                brat(-280);
-                sleep(500);
-                cleste(MIN_POS);
-                sleep(500);
-                brat(180);
-
-
-                gyroTurn(TURN_SPEED, 157.0);         // Turn  CW  to  145 Degrees
-                gyroHold(TURN_SPEED, 157.0, 1.5);         //  Hold 1450 Deg heading for a 1/2 second
-                brat(-169);
-                gyroDrive(0.7, 37, 157.0);  // Drive FWD 12 inches at 45 degrees
-                gyroHold(TURN_SPEED, 157.0, 1.5);    // Hold 145 Deg heading for a 1second
-                cleste(MAX_POS);
-                sleep(500);
-                brat(25);
-                sleep(1000);
-
-                gyroTurn(TURN_SPEED, -15.0);         // Turn  CW  to   0 Degrees
-                gyroHold(TURN_SPEED, -15.0, 0.5);         //  Hold 20 Deg heading for a 1/2 second
-                gyroDrive(DRIVE_SPEED, 35.0, -15.0);  // Drive FWD 39 inches at -30 degrees
-                cleste(MIN_POS);
-                sleep(500);
-                brat(112);
-
-                gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
-                gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
-                gyroDrive(DRIVE_SPEED, 10.0, 45.0);  // Drive FWD 12 inches at 45 degrees
-                brat(-50);
-                brat(100);
-
-//********************END TARGET A*************
-
-
+                targetZoneA();
                 break;
             case 1:
-                //****************************       TARGET B   *****************************
-                //Pornim motorul de aruncare si mergem spre pozita de tragere
-                //aruncare(V_ARUNCARE);
-                gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
-                gyroHold(TURN_SPEED, -2.5, 1);    // Hold 0 Deg heading for a 3 second
-
-                //tragere
-                impingere(4);
-
-                gyroTurn(TURN_SPEED, -45); //Turn CW to 40 Degrees
-                gyroHold(TURN_SPEED, -45, 1);
-                colectare(true);
-                gyroDrive(DRIVE_SPEED, -20, -45);
-                gyroHold(TURN_SPEED, -45, 0.5);
-                aruncare(0);
-                gyroTurn(TURN_SPEED, 0);
-                gyroHold(TURN_SPEED, 0, 0.5);
-
-                //astepta colecatrea sa fie okey
-                //sleep(2000);
-                //impingere(4);
-                //sleep(2000);
-                aruncare(840);
-                gyroDrive(DRIVE_SPEED, 44, 0);
-                gyroHold(TURN_SPEED, 0, 0.5);
-                brat(-280);
-                sleep(500);
-                cleste(MIN_POS);
-                sleep(500);
-                gyroDrive(DRIVE_SPEED, -47, 0);
-                cleste(MAX_POS);
-                gyroHold(TURN_SPEED, 0, 0.5);
-                impingere(2);
-                colectare(false);
-                aruncare(0);
-                brat(10);
-                cleste(MIN_POS);
-                gyroTurn(TURN_SPEED, 170);
-                gyroHold(TURN_SPEED, 170, 0.5);
-                gyroDrive(DRIVE_SPEED, 7, 170);
-                sleep(500);
-                cleste(MAX_POS);
-                sleep(1000);
-                brat(30);
-                gyroTurn(TURN_SPEED, 5);
-                gyroDrive(DRIVE_SPEED, 50, 5);
-                cleste(MIN_POS);
-                sleep(1000);
-                gyroDrive(DRIVE_SPEED, -10, 0);
-                brat(60);
-
+                targetZoneB();
                 break;
             case 4:
-                //**************************** TARGET C   *****************************
-                //Pornim motorul de aruncare si mergem spre pozita de tragere
-                //aruncare(V_ARUNCARE);
-                gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
-                gyroHold(TURN_SPEED, -0.5, 0.5);    // Hold 0 Deg heading for a 3 second
-
-                //tragere
-                impingere(4);
-                aruncare(0);
-
-                gyroDrive(DRIVE_SPEED, 50, 0.0);    // Drive FWD 55 inches
-                gyroHold(TURN_SPEED, 0.0, 0.5);    // Hold 0 Deg heading for a 3 second
-
-                //lasa wobbl goalul
-                brat(-270);
-                sleep(600);
-                cleste(MIN_POS);
-                gyroHold(TURN_SPEED, 0.0, 0.5);
-                gyroDrive(DRIVE_SPEED, -97, 0.0);    // Drive FWD 55 inches
-                gyroHold(TURN_SPEED, 0.0, 0.5);    // Hold 0 Deg heading for a 3 second
-
-                gyroTurn(TURN_SPEED, 90);
-                gyroHold(TURN_SPEED,90,0.5);
-
-                //prinde wobble golul
-                gyroDrive(DRIVE_SPEED, 13.5, 90);
-                gyroHold(TURN_SPEED,89, 0.5);
-                cleste(MAX_POS);
-                gyroHold(TURN_SPEED,89, 0.5);
-                brat(20);
-
-                //duce al 2lea woblle goal
-                gyroDrive(DRIVE_SPEED, -13.5, 90);
-                gyroTurn(TURN_SPEED, 0);
-                gyroHold(TURN_SPEED,0,0.5);
-
-                gyroDrive(DRIVE_SPEED,86,0);
-                cleste(MIN_POS);
-                brat(50);
-                gyroHold(TURN_SPEED,0,0.5);
-                cleste(MAX_POS);
-
-                gyroTurn(TURN_SPEED,-15);
-                gyroHold(TURN_SPEED, -15, 0.5);
-                gyroDrive(1,-50, -15);
-                gyroDrive(DRIVE_SPEED, 25, 0);
-                brat(60);
-
-
-
-
+                targetZoneC();
                 break;
-
-
         }
-
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -612,6 +453,186 @@ public class Autonom extends LinearOpMode {
         } else {
             robot.charger.setPower(0);
         }
+    }
+
+    //************************TARGET ZONE A*******************************
+    public void targetZoneA(){
+        gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+        gyroHold(TURN_SPEED, -2.5, 2);    // Hold 0 Deg heading for a 3 second
+
+        //tragere
+        impingere(4);
+        aruncare(0);
+
+        //se duce lasa wobble golul
+        gyroDrive(DRIVE_SPEED, 10, 0.0);
+        brat(-279);
+        sleep(500);
+        cleste(MIN_POS);
+        sleep(500);
+        brat(182);
+        gyroDrive(DRIVE_SPEED, -5, 0);
+
+        gyroTurn(TURN_SPEED, 156.0);         // Turn  CW  to  145 Degrees
+        gyroHold(TURN_SPEED, 156.0, 1.5);         //  Hold 1450 Deg heading for a 1/2 second
+        brat(-150);
+        gyroDrive(0.7, 37.5, 156.0);  // Drive FWD 12 inches at 45 degrees
+        gyroHold(TURN_SPEED, 156.0, 1.5);    // Hold 145 Deg heading for a 1second
+        cleste(MAX_POS);
+        sleep(500);
+        brat(25);
+        sleep(1000);
+
+
+        gyroTurn(TURN_SPEED, -15.0);         // Turn  CW  to   0 Degrees
+        gyroHold(TURN_SPEED, -15.0, 0.5);         //  Hold 20 Deg heading for a 1/2 second
+        gyroDrive(DRIVE_SPEED, 35.0, -15.0);  // Drive FWD 39 inches at -30 degrees
+        cleste(MIN_POS);
+        sleep(500);
+        brat(112);
+
+        //Parcare dupa lansarea al doilea woablle goalului
+        gyroDrive(DRIVE_SPEED, -10, 0);
+
+        gyroTurn(TURN_SPEED, 45.0);         // Turn  CW  to  45 Degrees
+        gyroHold(TURN_SPEED, 45.0, 0.5);    // Hold  45 Deg heading for a 1/2 second
+        gyroDrive(DRIVE_SPEED, 20.0, 45.0);  // Drive FWD 12 inches at 45 degrees
+        brat(-50);
+        brat(100);
+    }
+
+    //*******************************TARGET ZONE B******************************
+    public void targetZoneB(){
+        gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+        gyroHold(TURN_SPEED, -2.5, 1);    // Hold 0 Deg heading for a 3 second
+
+        //tragere
+        impingere(4);
+
+        gyroTurn(TURN_SPEED, -45); //Turn CW to 40 Degrees
+        gyroHold(TURN_SPEED, -45, 1);
+        colectare(true);
+        gyroDrive(DRIVE_SPEED, -20, -45);
+        gyroHold(TURN_SPEED, -45, 0.5);
+        aruncare(0);
+        gyroTurn(TURN_SPEED, 0);
+        gyroHold(TURN_SPEED, 0, 0.5);
+
+        //astepta colecatrea sa fie okey
+        //sleep(2000);
+        //impingere(4);
+        //sleep(2000);
+        aruncare(850);
+        gyroDrive(DRIVE_SPEED, 44, 0);
+        gyroHold(TURN_SPEED, 0, 0.5);
+        brat(-260);
+        sleep(500);
+        cleste(MIN_POS);
+        sleep(500);
+        gyroDrive(DRIVE_SPEED, -47, 0);
+        cleste(MAX_POS);
+        gyroHold(TURN_SPEED, 0, 0.5);
+        impingere(2);
+        colectare(false);
+        aruncare(0);
+        brat(10);
+        cleste(MIN_POS);
+        gyroTurn(TURN_SPEED, 170);
+        gyroHold(TURN_SPEED, 170, 0.5);
+        gyroDrive(DRIVE_SPEED, 8, 170);
+        sleep(500);
+        cleste(MAX_POS);
+        sleep(1000);
+        brat(30);
+        gyroTurn(TURN_SPEED, 5);
+        gyroDrive(DRIVE_SPEED, 50, 5);
+        cleste(MIN_POS);
+        sleep(1000);
+        gyroDrive(DRIVE_SPEED, -10, 0);
+        brat(120);
+    }
+    //***********************TARGET ZONE C***************************
+    public void targetZoneC(){
+        gyroDrive(DRIVE_SPEED, 53, 0.0);    // Drive FWD 55 inches
+        gyroHold(TURN_SPEED, -2.5, 0.5);    // Hold 0 Deg heading for a 3 second
+
+        //tragere
+        impingere(4);
+        aruncare(0);
+
+        //se intoarce  sa saprga inele
+        gyroTurn(TURN_SPEED, -45); //Turn CW to 40 Degrees
+        gyroHold(TURN_SPEED, -45, 0.5);
+        gyroDrive(DRIVE_SPEED, -29.5,-45);
+        aruncare(970);
+        //incepe miscare de colectare a ineloelor
+        gyroDrive(0.3, 5, -45);
+        colectare(true);
+
+        gyroDrive(0.03, -8, -45);
+        gyroHold(TURN_SPEED, -45, 0.5);
+
+
+        gyroTurn(TURN_SPEED, -20); //Turn CW to 40 Degrees
+        gyroHold(TURN_SPEED, -20, 0.5);
+
+        impingere(4);
+
+
+
+
+        brat(-240);
+        sleep(500);
+        gyroDrive(DRIVE_SPEED, 80, -18);
+        cleste(MIN_POS);
+
+        gyroDrive(DRIVE_SPEED, -30, 0);
+
+        /*
+
+        gyroDrive(DRIVE_SPEED, 50, 0.0);    // Drive FWD 55 inches
+        gyroHold(TURN_SPEED, 0.0, 0.5);    // Hold 0 Deg heading for a 3 second
+
+
+        //lasa wobbl goalul
+        brat(-270);
+        sleep(600);
+
+        cleste(MIN_POS);
+        gyroHold(TURN_SPEED, 0.0, 0.5);
+
+
+        gyroDrive(DRIVE_SPEED, -97, 0.0);    // Drive FWD 55 inches
+        gyroHold(TURN_SPEED, 0.0, 0.5);    // Hold 0 Deg heading for a 3 second
+
+        gyroTurn(TURN_SPEED, 90);
+        gyroHold(TURN_SPEED,90,0.5);
+
+        //prinde wobble golul
+        gyroDrive(DRIVE_SPEED, 13.5, 90);
+        gyroHold(TURN_SPEED,89, 0.5);
+        cleste(MAX_POS);
+        gyroHold(TURN_SPEED,89, 0.5);
+        brat(20);
+
+        //duce al 2lea woblle goal
+        gyroDrive(DRIVE_SPEED, -13.5, 90);
+        gyroTurn(TURN_SPEED, 0);
+        gyroHold(TURN_SPEED,0,0.5);
+
+        gyroDrive(DRIVE_SPEED,86,0);
+        cleste(MIN_POS);
+        brat(50);
+        gyroHold(TURN_SPEED,0,0.5);
+        cleste(MAX_POS);
+
+        gyroTurn(TURN_SPEED,-15);
+        gyroHold(TURN_SPEED, -15, 0.5);
+        gyroDrive(1,-50, -15);
+        gyroDrive(DRIVE_SPEED, 25, 0);
+        brat(60);
+         */
+
     }
 
     public void encoderDrive(double speed, double leftInches, double rightInches, double leftFront, double rightFront) {

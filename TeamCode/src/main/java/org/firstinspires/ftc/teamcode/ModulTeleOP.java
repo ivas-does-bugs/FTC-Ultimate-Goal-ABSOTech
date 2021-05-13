@@ -45,7 +45,7 @@ public class ModulTeleOP extends OpMode {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double DRIVE_SPEED = 0.8;
     static final double TURN_SPEED = 0.5;
-    static final double VITEZA_ARUNCARE = 930;
+    static final double VITEZA_ARUNCARE = 990;
 
 
     @Override
@@ -94,7 +94,6 @@ public class ModulTeleOP extends OpMode {
 
         vertical = -gamepad1.right_stick_y;
         strafe = gamepad1.left_stick_x;
-        pusherPower = -gamepad2.right_stick_y;
 
         rotateSmalLeft = (double) gamepad1.left_trigger;
         rotateSmalRight = (double) gamepad1.right_trigger;
@@ -140,27 +139,16 @@ public class ModulTeleOP extends OpMode {
         //Turn on/off the shooting mechanism
         if (gamepad2.x) {
             shooter.setVelocity(VITEZA_ARUNCARE);
+
         }
         if (gamepad2.y) {
             shooter.setVelocity(0);
         }
 
-        if (gamepad2.right_bumper) {
-            double VA = 850;
+        if (gamepad2.left_bumper) {
+            double VA = 890;
             shooter.setVelocity(VA);
         }
-
-
-                /*
-                //Catch with the brat or something idk
-                if (gamepad2.left_trigger > 0) {
-                    brat.setPower(0.5);
-                } else if(gamepad2.right_trigger > 0){
-                    brat.setPower(-0.5);
-                }else {
-                    brat.setPower(0);
-                }
-*/
 
         if (gamepad2.dpad_right) {
             clesteDreapta.setPosition(MAX_POS);
@@ -172,9 +160,8 @@ public class ModulTeleOP extends OpMode {
         }
 
         // setare pusher cu encoder
-        if (gamepad2.left_bumper) {
+        if (gamepad2.right_bumper) {
             int tinta;
-
 
            pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
            pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -287,91 +274,3 @@ public class ModulTeleOP extends OpMode {
                     pusher.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 }*/
 }
-
-/*
-    public void encoderDrive(double speed, double leftInches, double rightInches, double leftFront, double rightFront, double timeoutS) {
-
-
-        motorLeftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorLeftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        motorLeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        int newLeftTarget = 0;
-        int newRightTarget = 0;
-        int newLeftFront = 0;
-        int newRightFront = 0;
-
-        // Determine new target position, and pass to motor controller
-        newLeftTarget = (int) (-leftInches * COUNTS_PER_INCH);
-        newRightTarget = (int) (-rightInches * COUNTS_PER_INCH);
-
-        newLeftFront = (int) (-leftFront * COUNTS_PER_INCH);
-        newRightFront = (int) (-rightFront * COUNTS_PER_INCH);
-
-        //Semnal that path is in progress
-        telemetry.addData("Path", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-        telemetry.update();
-
-        // reset the timeout time and start motion.
-        runtime.reset();
-        motorLeftBack.setPower(Math.abs(speed));
-        motorLeftFront.setPower(Math.abs(speed));
-        motorRightBack.setPower(Math.abs(speed));
-        motorRightFront.setPower(Math.abs(speed));
-
-        motorLeftBack.setTargetPosition(newLeftTarget);
-        motorLeftFront.setTargetPosition(newLeftFront);
-        motorRightBack.setTargetPosition(newRightTarget);
-        motorRightFront.setTargetPosition(newRightFront);
-
-        // Turn On RUN_TO_POSITION
-        motorLeftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motorLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (opModeIsActive() && (runtime.seconds() < timeoutS)) {
-
-            telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-            telemetry.addData("Spate", "Running to  %7d :%7d :",
-                    motorLeftBack.getCurrentPosition(),
-                    motorRightBack.getCurrentPosition());
-
-            telemetry.addData("Fata", "Running at %7d : %7d",
-                    motorLeftFront.getCurrentPosition(),
-                    motorRightFront.getCurrentPosition());
-
-            telemetry.addData("Target", motorLeftFront.getTargetPosition());
-            telemetry.update();
-        }
-
-        //Turn of the power
-        motorLeftBack.setPower(0);
-        motorRightBack.setPower(0);
-        motorLeftFront.setPower(0);
-        motorRightFront.setPower(0);
-
-        motorLeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        motorRightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        motorLeftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorRightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        motorLeftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-    }
-*/

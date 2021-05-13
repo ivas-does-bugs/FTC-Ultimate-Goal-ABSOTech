@@ -200,6 +200,8 @@ public class PushbotDriveByGyro extends LinearOpMode {
                 leftSpeed = speed - steer;
                 rightSpeed = speed + steer;
 
+                //!!!!!!!!! DONT REMOVE/CHANGE THE COMMENT BELOW , THE CODE WILL STOP WORKING !!!!!!!!!!!
+                //chicken nuggets
                 // Normalize speeds if either one exceeds +/- 1.0;
                 max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
                 if (max > 1.0)

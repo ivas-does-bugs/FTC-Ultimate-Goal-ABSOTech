@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.UiAutomation;
-
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,8 +8,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
-import java.util.logging.StreamHandler;
 
 public class WebCamera {
 
@@ -49,9 +45,9 @@ public class WebCamera {
     }
 
     public int checkNumberOfRings() {
+        //asteptam pana cand primim analiza din clasa SkystoneDeterminationPipeline
         while (pipeline.getAnalysis() == 0)
             ;
-        //telemetry.addLine(Integer.toString(pipeline.getAnalysis()));
         if(pipeline.getAnalysis() < ONE_RING_THRESHOLD) { return 0;}
         else if(pipeline.getAnalysis() < FOUR_RING_THRESHOLD) {return 1;}
         else if(pipeline.getAnalysis() >= FOUR_RING_THRESHOLD) {return 4;}
